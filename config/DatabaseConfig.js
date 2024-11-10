@@ -16,7 +16,6 @@ const db = mysql.createConnection({
 db.connect((err) => {
     if (err) {
         console.log('Erro ao conectar ao banco:', err.message);
-        console.log('Variável de ambiente DB_PASS:', process.env.DB_PASS);  // Para depuração
         throw err;
     }
     console.log('Conectado ao banco de dados');

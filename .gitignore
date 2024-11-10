@@ -128,3 +128,6 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+#conf firebase
+avaliacao-iii-fwds-firebase-adminsdk-inwmv-896c2cb51e.json

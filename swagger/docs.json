@@ -1,0 +1,279 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "AURA EVENTOS API",
+    "version": "1.0.0"
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "Evento": {
+        "type": "object",
+        "properties": {
+          "nome": {
+            "type": "string",
+            "example": "Festa de Aniversário"
+          },
+          "tipo": {
+            "type": "string",
+            "example": "Aniversário"
+          },
+          "data": {
+            "type": "string",
+            "format": "date",
+            "example": "2024-02-20"
+          },
+          "horaEvento": {
+            "type": "string",
+            "example": "18:00"
+          },
+          "qtdConvidados": {
+            "type": "integer",
+            "example": 50
+          },
+          "local": {
+            "type": "string",
+            "example": "Salão de Festas"
+          },
+          "descricao": {
+            "type": "string",
+            "example": "Festa temática com decoração especial."
+          },
+          "contratante": {
+            "type": "object",
+            "properties": {
+              "nome": {
+                "type": "string",
+                "example": "João Silva"
+              },
+              "telefone": {
+                "type": "string",
+                "example": "99999-9999"
+              },
+              "email": {
+                "type": "string",
+                "example": "joao@example.com"
+              }
+            }
+          },
+          "convidados": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "nome": {
+                  "type": "string",
+                  "example": "Maria"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "maria@example.com"
+                },
+                "confirmado": {
+                  "type": "boolean",
+                  "example": true
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/api/eventos": {
+      "post": {
+        "summary": "Cria um novo evento",
+        "tags": ["Eventos"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Evento"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Evento criado com sucesso"
+          }
+        }
+      },
+      "get": {
+        "summary": "Busca eventos com paginação",
+        "tags": ["Eventos"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "search",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Termo de busca para filtrar eventos"
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Número da página"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Número de itens por página"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de eventos com paginação",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Evento"
+                      }
+                    },
+                    "total": {
+                      "type": "integer",
+                      "description": "Total de eventos encontrados"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/eventos/{id}": {
+      "get": {
+        "summary": "Busca um evento pelo ID",
+        "tags": ["Eventos"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID do evento"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dados do evento",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Evento"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Evento não encontrado"
+          }
+        }
+      },
+      "put": {
+        "summary": "Edita um evento existente",
+        "tags": ["Eventos"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID do evento a ser editado"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Evento"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Evento editado com sucesso"
+          },
+          "404": {
+            "description": "Evento não encontrado"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Exclui um evento pelo ID",
+        "tags": ["Eventos"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID do evento a ser excluído"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Evento excluído com sucesso"
+          },
+          "404": {
+            "description": "Evento não encontrado"
+          }
+        }
+      }
+    }
+  }
+}
